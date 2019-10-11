@@ -2,13 +2,18 @@ import time
 from nielvis import AnalogInput, Bank, AIChannel, AIRange, AIMode
 
 def readWaveformFromAI(p_sampleRate, p_sampleSize):
-    ai_bank = Bank.A
+    ai_bank = Bank.B
     ai_channel = AIChannel.AI0
+    ai_channel_2 = AIChannel.AI1
     ai_range = AIRange.PLUS_OR_MINUS_1V
     ai_mode = AIMode.SINGLE_ENDED
     
     value_array = []
     with AnalogInput({'bank': ai_bank,
+                  'channel': ai_channel,
+                  'range': ai_range,
+                  'mode': ai_mode},
+                  {'bank': ai_bank,
                   'channel': ai_channel,
                   'range': ai_range,
                   'mode': ai_mode}) as AI_single_channel:
@@ -28,7 +33,7 @@ def readWaveformFromAI(p_sampleRate, p_sampleSize):
         # stop signal acquisition
         AI_single_channel.stop_continuous_mode()
     
-    return value_array[0][0]
+    return value_array[0]
 
 def main():
     duration = 5
@@ -36,10 +41,15 @@ def main():
     sampleSize = sampleRate * duration
     
     waveform = readWaveformFromAI(sampleRate, sampleSize)
-    print('waveform size = %d' % len(waveform))
     
-    with open('/home/admin/rawaudio.txt', 'w') as rawAudioFile:
-        for data in waveform:
-            rawAudioFile.write("%f\n" % float(data))
+    i = 0
+    for channel in waveform:
+        print('waveform size = %d' % len(channel))
+        
+        with open('/home/admin/rawaudio_%d.txt' % i, 'w') as rawAudioFile:
+            for data in channel:
+                rawAudioFile.write("%f\n" % float(data))
+        
+        i += 1
             
 main()
