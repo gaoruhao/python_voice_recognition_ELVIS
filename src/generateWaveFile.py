@@ -62,12 +62,11 @@ def main():
     sampleSize = sampleRate * duration
     
     waveforms = readWaveformFromAI(sampleRate, sampleSize)
+    nchannels = len(waveforms)
     
     pcmChannels = []
-    nchannels = len(waveforms)
     for waveform in waveforms:
         pcmResults = encodePCM(waveform, 1.0)
-        print('pcmResults size = %d' % len(pcmResults))
         pcmChannels.append(pcmResults)   
     
     sampleSize = len(pcmChannels[0])
