@@ -79,8 +79,9 @@ def main():
             pcmMerged.append(pcmChannels[1][i])
     else:
         pcmMerged = pcmChannels[0]
-        
-    params = (nchannels, 2, 44100 / nchannels, sampleSize, 'NONE', 'not compressed')
+
+    # WORKAROUND: sampleRate / nchannels
+    params = (nchannels, 2, sampleRate / nchannels, sampleSize, 'NONE', 'not compressed')
     print(params)
     writeWaveFile('./output_weather.wav', params, pcmMerged)
 
