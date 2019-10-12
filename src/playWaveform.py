@@ -68,8 +68,8 @@ def writeWaveformToAO(p_waveform, p_sampleRate):
         print('stop play')
         AO_single_channel.stop_continuous_mode()
 
-def playWaveform():
-    pcmArray, pcmParams = readWaveFile('/home/admin/test123.wav')
+def playWaveform(p_fileToPlay):
+    pcmArray, pcmParams = readWaveFile(p_fileToPlay)
     print('[DBG] WAVE params: %s' % (pcmParams,))
     
     # always choose pcmArray[0] because we only support 1 channel audio out for now.
@@ -80,4 +80,5 @@ def playWaveform():
     print('[DBG] waveform length %d' % len(waveformToWrite))
     writeWaveformToAO(waveformToWrite, pcmParams.framerate)
 
-playWaveform()
+if __name__ == "__main__":
+    playWaveform('/home/admin/test123.wav')

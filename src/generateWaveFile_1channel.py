@@ -47,7 +47,7 @@ def readWaveformFromAI(p_sampleRate, p_sampleSize):
     
     return value_array[0]
 
-def main():
+def generateWaveFile(p_filename):
     duration = 5
     sampleRate = 44100
     sampleSize = sampleRate * duration
@@ -73,6 +73,7 @@ def main():
     # WORKAROUND: sampleRate / nchannels
     params = (nchannels, 2, sampleRate / nchannels, sampleSize, 'NONE', 'not compressed')
     print(params)
-    writeWaveFile('./output_1chan.wav', params, pcmMerged)
+    writeWaveFile(p_filename, params, pcmMerged)
 
-main()
+if __name__ == "__main__":
+    generateWaveFile('./output_1chan.wav')
