@@ -137,4 +137,4 @@ def textToPcm(p_text, p_pcmFile):
     ws.run_forever(sslopt={"cert_reqs": ssl.CERT_NONE})
 
 if __name__ == "__main__":
-    textToPcm("这是一个语音合成测试示例。", './test.pcm')
+    textToPcm("歌唱祖国", './test.pcm')

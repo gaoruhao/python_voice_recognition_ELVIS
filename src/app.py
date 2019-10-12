@@ -8,7 +8,7 @@ from voice.convertTextToAudio import textToPcm
 from nielvis import Bank, AIChannel
 
 # Preset Parameters
-wavefile = '/home/admin/app.wav'
+wavefile = './app.wav'
 sampleRate = 16000
 duration = 30 
 bank = Bank.B

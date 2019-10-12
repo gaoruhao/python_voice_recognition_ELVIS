@@ -28,12 +28,12 @@ def findSongName(p_filename):
 
         res = requests.post(url, headers=header,data=payload)
         result = res.content
-        result = result.decode("unicode_escape")
+        result = result.decode("utf-8")
         result = json.loads(result)
         
         if len(result["data"]) > 0:
             song = result["data"][0]
-            print(song["song"], ", singer is ", song["singer"])
+            # print(song["song"], ", singer is ", song["singer"])
             return song["song"]
         else:
             print(result)
