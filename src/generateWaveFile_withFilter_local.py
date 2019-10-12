@@ -8,7 +8,7 @@ def readWaveFile(p_file):
     with wave.open(p_file, 'rb') as wavefile:
         params = wavefile.getparams()
         frameInBytes = wavefile.readframes(wavefile.getnframes())
-        print(len(list(frameInBytes)))
+        # print(len(list(frameInBytes)))
         int_iter = struct.iter_unpack('<i', frameInBytes)
         intArray = []
         for int_tuple in int_iter:

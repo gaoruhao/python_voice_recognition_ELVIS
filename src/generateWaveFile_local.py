@@ -1,7 +1,6 @@
 import wave
 import struct
 import time
-import numpy as np
 # from nielvis import AnalogInput, Bank, AIChannel, AIRange, AIMode
 
 def readWaveFile(p_file):
@@ -39,10 +38,10 @@ def encodePCM(p_waveform, p_amplitude, p_bitWidth=16):
     return pcmResults
 
 def main():
-    intArray, params = readWaveFile('good.wav')
-    print(params)
-    print(params.nframes)
-    print(len(intArray))
+    # intArray, params = readWaveFile('good.wav')
+    # print(params)
+    # print(params.nframes)
+    # print(len(intArray))
     
     pcmChannels = []
     # files = ['rawaudio_0.txt']
@@ -72,7 +71,7 @@ def main():
     else:
         pcmMerged = pcmChannels[0]
         
-    params = (nchannels, 2, 44100 / 2, sampleSize, 'NONE', 'not compressed')
+    params = (nchannels, 2, int(44100 / 3), sampleSize, 'NONE', 'not compressed')
     print(params)
     writeWaveFile('./output_test123.wav', params, pcmMerged)
 
