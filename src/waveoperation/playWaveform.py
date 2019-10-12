@@ -1,6 +1,7 @@
 import wave
 import struct
 import math
+import time
 from nielvis import AnalogOutput, Bank, AOChannel
 
 def readWaveFile(p_file):
@@ -65,6 +66,7 @@ def writeWaveformToAO(p_waveform, p_sampleRate):
 
             AO_single_channel.write(toWrite, p_sampleRate)
             
+        time.sleep(5)
         print('stop play')
         AO_single_channel.stop_continuous_mode()
 

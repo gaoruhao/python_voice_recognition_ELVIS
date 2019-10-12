@@ -31,6 +31,8 @@ def findSongName(p_filename):
         result = json.loads(result)
         for song in result["data"]:
             print(song["song"], ", singer is ", song["singer"])
+        
+        print(result)
 
 if __name__ == "__main__":
     findSongName('/home/admin/output_1chan.wav')

@@ -40,17 +40,16 @@ def readWaveformFromAI(p_sampleRate, p_sampleSize, p_bank=Bank.A, p_channel=AICh
         value_array = AI_single_channel.read(p_sampleSize, timeout)
 
         print('stop recording')
+        
         # stop signal acquisition
         AI_single_channel.stop_continuous_mode()
     
     return value_array[0]
 
-def generateWaveFile(p_filename, p_bank=Bank.A, p_channel=AIChannel.AI0):
-    duration = 5
-    sampleRate = 44100
-    sampleSize = sampleRate * duration
+def generateWaveFile(p_filename, p_sampleRate=44100, p_duration=5, p_bank=Bank.A, p_channel=AIChannel.AI0):
+    sampleSize = p_sampleRate * p_duration
     
-    waveforms = readWaveformFromAI(sampleRate, sampleSize, p_bank, p_channel)
+    waveforms = readWaveformFromAI(p_sampleRate, sampleSize, p_bank, p_channel)
     nchannels = len(waveforms)
     
     pcmChannels = []
@@ -69,7 +68,8 @@ def generateWaveFile(p_filename, p_bank=Bank.A, p_channel=AIChannel.AI0):
         pcmMerged = pcmChannels[0]
 
     # WORKAROUND: sampleRate / nchannels
-    params = (nchannels, 2, sampleRate / nchannels, sampleSize, 'NONE', 'not compressed')
+    factor = 1
+    params = (nchannels, 2, int(p_sampleRate / (nchannels * factor)), sampleSize, 'NONE', 'not compressed')
     print(params)
     writeWaveFile(p_filename, params, pcmMerged)
 
