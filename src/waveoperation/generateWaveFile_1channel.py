@@ -56,7 +56,7 @@ def generateWaveFile(p_filename, p_bank=Bank.A, p_channel=AIChannel.AI0):
     pcmChannels = []
     for waveform in waveforms:
         pcmResults = encodePCM(waveform, 1.0)
-        pcmChannels.append(pcmResults)   
+        pcmChannels.append(pcmResults)
     
     sampleSize = len(pcmChannels[0])
     

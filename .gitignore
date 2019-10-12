@@ -50,6 +50,7 @@ coverage.xml
 # Audio
 *.wav
 *.txt
+*.pcm
 
 # Translations
 *.mo
