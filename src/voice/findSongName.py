@@ -11,7 +11,7 @@ def findSongName(p_filename):
     secret_key = "35f450045ba5828ceff7466818d876bd"
     curtime = str(int(time.time()))
 
-    with open('p_filename','rb') as payload:
+    with open(p_filename,'rb') as payload:
         base64_param = b'eyJlbmdpbmVfdHlwZSI6InNtczE2ayIsImF1ZSI6InJhdyJ9'
         tt = str(base64_param,'utf-8')
         m2 = hashlib.md5()
