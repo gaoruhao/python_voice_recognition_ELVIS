@@ -6,13 +6,13 @@ from nielvis import Bank, AIChannel
 # Preset Parameters
 wavefile = '/home/admin/app.wav'
 sampleRate = 16000
-duration = 10 
+duration = 30 
 bank = Bank.B
 channel = AIChannel.AI0
 
 def application():
     generateWaveFile(wavefile, sampleRate, duration, bank, channel)
-    findSongName(wavefile)
+    songName = findSongName(wavefile)
     # text to audio
     playWaveform(wavefile)
     

@@ -6,6 +6,7 @@ import json
 import time
 
 def findSongName(p_filename):
+    print('Finding song name ...')
     url = "http://webqbh.xfyun.cn/v1/service/v1/qbh"
     appid = "5d9ff727"
     secret_key = "35f450045ba5828ceff7466818d876bd"
@@ -29,10 +30,13 @@ def findSongName(p_filename):
         result = res.content
         result = result.decode("unicode_escape")
         result = json.loads(result)
-        for song in result["data"]:
-            print(song["song"], ", singer is ", song["singer"])
         
-        print(result)
+        if len(result["data"]) > 0:
+            song = result["data"][0]
+            print(song["song"], ", singer is ", song["singer"])
+            return song["song"]
+        else:
+            print(result)
 
 if __name__ == "__main__":
     findSongName('/home/admin/output_1chan.wav')
