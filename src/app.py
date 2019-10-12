@@ -10,15 +10,19 @@ from nielvis import Bank, AIChannel
 # Preset Parameters
 wavefile = './app.wav'
 sampleRate = 16000
-duration = 30 
+duration = 15 
 bank = Bank.B
 channel = AIChannel.AI0
 pcmfile = './temp.pcm'
 
 def application():
-    #generateWaveFile(wavefile, sampleRate, duration, bank, channel)
+    generateWaveFile(wavefile, sampleRate, duration, bank, channel)
     
     songName = findSongName(wavefile)
+    
+    if songName == "":
+        print('song name not found')
+        return
     
     print('text to wave starting ...')
     textToPcm(songName, pcmfile)

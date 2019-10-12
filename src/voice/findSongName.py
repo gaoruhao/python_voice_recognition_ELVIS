@@ -29,14 +29,18 @@ def findSongName(p_filename):
         res = requests.post(url, headers=header,data=payload)
         result = res.content
         result = result.decode("utf-8")
+        result2 = res.content.decode("unicode_escape")
         result = json.loads(result)
+        result2 = json.loads(result2)
         
         if len(result["data"]) > 0:
             song = result["data"][0]
             # print(song["song"], ", singer is ", song["singer"])
+            print(result2["data"][0]["song"])
             return song["song"]
         else:
             print(result)
+            return ""
 
 if __name__ == "__main__":
     findSongName('/home/admin/output_1chan.wav')

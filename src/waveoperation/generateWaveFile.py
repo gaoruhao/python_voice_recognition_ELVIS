@@ -4,7 +4,7 @@ import time
 from nielvis import AnalogInput, Bank, AIChannel, AIRange, AIMode
 
 def writeWaveFile(p_file, p_param, p_intArray):
-    with wave.open(p_file, 'wb') as wavefile:
+    with wave.open(p_file, 'w') as wavefile:
         wavefile.setparams(p_param)
         packFormat = '<' + str(len(p_intArray)) + 'h'
         dataInBytes = struct.pack(packFormat, *p_intArray);

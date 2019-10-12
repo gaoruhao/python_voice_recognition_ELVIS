@@ -22,13 +22,15 @@ def encodePCM(p_waveform, p_amplitude, p_bitWidth=16):
     
     return pcmResults
 
-def readWaveformFromAI(p_sampleRate, p_sampleSize, p_bank=Bank.A, p_channel=AIChannel.AI0):
+def readWaveformFromAI(p_sampleRate, p_sampleSize):
+    ai_bank = Bank.A
+    ai_channel = AIChannel.AI0
     ai_range = AIRange.PLUS_OR_MINUS_1V
     ai_mode = AIMode.SINGLE_ENDED
     
     value_array = []
-    with AnalogInput({'bank': p_bank,
-                  'channel': p_channel,
+    with AnalogInput({'bank': ai_bank,
+                  'channel': ai_channel,
                   'range': ai_range,
                   'mode': ai_mode}) as AI_single_channel:
         # configure the sample rate and start the acquisition
@@ -40,22 +42,23 @@ def readWaveformFromAI(p_sampleRate, p_sampleSize, p_bank=Bank.A, p_channel=AICh
         value_array = AI_single_channel.read(p_sampleSize, timeout)
 
         print('stop recording')
-        
         # stop signal acquisition
         AI_single_channel.stop_continuous_mode()
     
     return value_array[0]
 
-def generateWaveFile(p_filename, p_sampleRate=44100, p_duration=5, p_bank=Bank.A, p_channel=AIChannel.AI0):
-    sampleSize = p_sampleRate * p_duration
+def main():
+    duration = 5
+    sampleRate = 44100
+    sampleSize = sampleRate * duration
     
-    waveforms = readWaveformFromAI(p_sampleRate, sampleSize, p_bank, p_channel)
+    waveforms = readWaveformFromAI(sampleRate, sampleSize)
     nchannels = len(waveforms)
     
     pcmChannels = []
     for waveform in waveforms:
-        pcmResults = encodePCM(waveform, 1.5)
-        pcmChannels.append(pcmResults)
+        pcmResults = encodePCM(waveform, 1.0)
+        pcmChannels.append(pcmResults)   
     
     sampleSize = len(pcmChannels[0])
     
@@ -68,10 +71,8 @@ def generateWaveFile(p_filename, p_sampleRate=44100, p_duration=5, p_bank=Bank.A
         pcmMerged = pcmChannels[0]
 
     # WORKAROUND: sampleRate / nchannels
-    factor = 1
-    params = (nchannels, 2, int(p_sampleRate / (nchannels * factor)), sampleSize, 'NONE', 'not compressed')
+    params = (nchannels, 2, sampleRate / nchannels, sampleSize, 'NONE', 'not compressed')
     print(params)
-    writeWaveFile(p_filename, params, pcmMerged)
+    writeWaveFile('./output_1chan.wav', params, pcmMerged)
 
-if __name__ == "__main__":
-    generateWaveFile('./output_1chan.wav')
+main()

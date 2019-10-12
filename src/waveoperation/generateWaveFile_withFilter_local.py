@@ -18,7 +18,7 @@ def readWaveFile(p_file):
         return intArray, params
 
 def writeWaveFile(p_file, p_param, p_intArray):
-    with wave.open(p_file, 'wb') as wavefile:
+    with wave.open(p_file, 'w') as wavefile:
         wavefile.setparams(p_param)
         packFormat = '<' + str(len(p_intArray)) + 'i'
         dataInBytes = struct.pack(packFormat, *p_intArray);
