@@ -22,15 +22,13 @@ def encodePCM(p_waveform, p_amplitude, p_bitWidth=16):
     
     return pcmResults
 
-def readWaveformFromAI(p_sampleRate, p_sampleSize):
-    ai_bank = Bank.A
-    ai_channel = AIChannel.AI0
+def readWaveformFromAI(p_sampleRate, p_sampleSize, p_bank=Bank.A, p_channel=AIChannel.AI0):
     ai_range = AIRange.PLUS_OR_MINUS_1V
     ai_mode = AIMode.SINGLE_ENDED
     
     value_array = []
-    with AnalogInput({'bank': ai_bank,
-                  'channel': ai_channel,
+    with AnalogInput({'bank': p_bank,
+                  'channel': p_channel,
                   'range': ai_range,
                   'mode': ai_mode}) as AI_single_channel:
         # configure the sample rate and start the acquisition
@@ -47,12 +45,12 @@ def readWaveformFromAI(p_sampleRate, p_sampleSize):
     
     return value_array[0]
 
-def generateWaveFile(p_filename):
+def generateWaveFile(p_filename, p_bank=Bank.A, p_channel=AIChannel.AI0):
     duration = 5
     sampleRate = 44100
     sampleSize = sampleRate * duration
     
-    waveforms = readWaveformFromAI(sampleRate, sampleSize)
+    waveforms = readWaveformFromAI(sampleRate, sampleSize, p_bank, p_channel)
     nchannels = len(waveforms)
     
     pcmChannels = []

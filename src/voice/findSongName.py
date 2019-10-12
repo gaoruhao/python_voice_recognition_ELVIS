@@ -5,7 +5,7 @@ import hmac
 import json
 import time
 
-def music_iat(p_filename):
+def findSongName(p_filename):
     url = "http://webqbh.xfyun.cn/v1/service/v1/qbh"
     appid = "5d9ff727"
     secret_key = "35f450045ba5828ceff7466818d876bd"
@@ -33,4 +33,4 @@ def music_iat(p_filename):
             print(song["song"], ", singer is ", song["singer"])
 
 if __name__ == "__main__":
-    music_iat('/home/admin/output_1chan.wav')
+    findSongName('/home/admin/output_1chan.wav')
