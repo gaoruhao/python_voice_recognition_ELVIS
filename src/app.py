@@ -21,13 +21,12 @@ def application():
     songName = findSongName(wavefile)
     
     if songName == "":
-        print('song name not found')
+        print('对不起，您所唱的歌曲无法识别。')
         return
     
-    print('text to wave starting ...')
+    print('歌名处理中...')
     textToPcm(songName, pcmfile)
     pcmToWav(pcmfile)
-    print('text to wave stopped')
     
     playWaveform(pcmfile + '.wav')
     

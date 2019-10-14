@@ -94,7 +94,7 @@ def textToPcm(p_text, p_pcmFile):
                 errMsg = json.loads(message)["message"]
                 print("sid:%s call error:%s code is:%s" % (sid, errMsg, code))
             else:
-                print(PCM_FILE)
+                #print(PCM_FILE)
                 with open(PCM_FILE,'ab') as f:
                     f.write(audio)
         except Exception as e:
