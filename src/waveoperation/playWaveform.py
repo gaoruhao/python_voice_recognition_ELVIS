@@ -4,6 +4,9 @@ import math
 import time
 from nielvis import AnalogOutput, Bank, AOChannel
 
+def printString(p_text):
+    print(p_text.encode("utf-8").decode('unicode_escape'))
+
 def readWaveFile(p_file):
     with wave.open(p_file, 'rb') as wavefile:
         params = wavefile.getparams()
@@ -50,8 +53,7 @@ def writeWaveformToAO(p_waveform, p_sampleRate, p_channelRef=None):
             { 'bank': bank, 'channel': channel }
         );
 
-    # print('开始播放...')
-    print('start to play...')
+    printString('开始播放...')
     timeout = -1
     MAX_SINGLE_WRITE = 200000
     totalSize = len(p_waveform)
@@ -71,8 +73,7 @@ def writeWaveformToAO(p_waveform, p_sampleRate, p_channelRef=None):
         
     time.sleep(5)
     
-    # print('结束播放')
-    print('Stop playing')
+    printString('结束播放')
     p_channelRef.stop_continuous_mode()
     
     if isNewChannel:

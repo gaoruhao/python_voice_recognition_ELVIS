@@ -3,6 +3,8 @@ from waveoperation.generateWaveFile_1channel import generateWaveFile
 from waveoperation.playWaveform import playWaveform
 from waveoperation.pcmToWav import pcmToWav
 
+import json
+
 from voice.findSongName import findSongName
 from voice.convertTextToAudio import textToPcm
 
@@ -21,6 +23,9 @@ pcmfile = './songname.pcm'
 
 ao_bank = Bank.B
 ao_channel = AOChannel.AO0
+
+def printString(p_text):
+    print(p_text.encode("utf-8").decode('unicode_escape'))
 
 def application():
     AIchannelRef = AnalogInput(
@@ -50,7 +55,7 @@ def application():
             return
         
         # print('歌名处理中...')
-        print('finding song name...')
+        printString('歌名处理中...')
         textToPcm(songName, pcmfile)
         pcmToWav(pcmfile)
         
