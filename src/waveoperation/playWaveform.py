@@ -26,7 +26,7 @@ def readWaveFile(p_file):
                 pcmDataArray[channelIndex].append(int_tuple[0])
             i += 1
 
-        print('[DBG] dim: %d, size of each: %d' % (len(pcmDataArray), len(pcmDataArray[0])))
+        # print('[DBG] dim: %d, size of each: %d' % (len(pcmDataArray), len(pcmDataArray[0])))
         return pcmDataArray, params
 
 def decodePCM(p_intArray, p_amplitude, p_bitWidth=16):
@@ -40,37 +40,45 @@ def decodePCM(p_intArray, p_amplitude, p_bitWidth=16):
     
     return waveform
     
-def writeWaveformToAO(p_waveform, p_sampleRate):
+def writeWaveformToAO(p_waveform, p_sampleRate, p_channelRef=None):
     bank = Bank.B
     channel = AOChannel.AO0
+    isNewChannel = p_channelRef is None;
     
-    with AnalogOutput(
-        { 'bank': bank, 'channel': channel }
-        ) as AO_single_channel:
+    if isNewChannel:
+        p_channelRef = AnalogOutput(
+            { 'bank': bank, 'channel': channel }
+        );
 
-        print('开始播放...')
-        timeout = -1
-        MAX_SINGLE_WRITE = 200000
-        totalSize = len(p_waveform)
+    # print('开始播放...')
+    print('start to play...')
+    timeout = -1
+    MAX_SINGLE_WRITE = 200000
+    totalSize = len(p_waveform)
+    
+    # limit the waveform length of single write
+    numberOfChunks = math.ceil(totalSize / MAX_SINGLE_WRITE)
+    for i in range(numberOfChunks):
+        startOffset = i * MAX_SINGLE_WRITE
+        endOffset = min(totalSize, (i + 1) * MAX_SINGLE_WRITE - 1)
+        #print('[DBG] write range: %d:%d' % (startOffset, endOffset))
         
-        # limit the waveform length of single write
-        numberOfChunks = math.ceil(totalSize / MAX_SINGLE_WRITE)
-        for i in range(numberOfChunks):
-            startOffset = i * MAX_SINGLE_WRITE
-            endOffset = min(totalSize, (i + 1) * MAX_SINGLE_WRITE - 1)
-            #print('[DBG] write range: %d:%d' % (startOffset, endOffset))
-            
-            toWrite = [p_waveform[startOffset:endOffset]]
-            if i == 0:
-                AO_single_channel.start_continuous_mode(toWrite, p_sampleRate, timeout)
+        toWrite = [p_waveform[startOffset:endOffset]]
+        if i == 0:
+            p_channelRef.start_continuous_mode(toWrite, p_sampleRate, timeout)
 
-            AO_single_channel.write(toWrite, p_sampleRate)
-            
-        time.sleep(5)
-        print('结束播放')
-        AO_single_channel.stop_continuous_mode()
+        p_channelRef.write(toWrite, p_sampleRate)
+        
+    time.sleep(5)
+    
+    # print('结束播放')
+    print('Stop playing')
+    p_channelRef.stop_continuous_mode()
+    
+    if isNewChannel:
+        p_channelRef.close()
 
-def playWaveform(p_fileToPlay):
+def playWaveform(p_fileToPlay, p_channelRef=None):
     pcmArray, pcmParams = readWaveFile(p_fileToPlay)
     #print('[DBG] WAVE params: %s' % (pcmParams,))
     
@@ -80,7 +88,7 @@ def playWaveform(p_fileToPlay):
     waveformToWrite = decodePCM(pcmArray[0], AMP_OUT, pcmParams.sampwidth * BITS_PER_BYTE)
     
     #print('[DBG] waveform length %d' % len(waveformToWrite))
-    writeWaveformToAO(waveformToWrite, pcmParams.framerate)
+    writeWaveformToAO(waveformToWrite, pcmParams.framerate, p_channelRef)
 
 if __name__ == "__main__":
     playWaveform('/home/admin/test123.wav')

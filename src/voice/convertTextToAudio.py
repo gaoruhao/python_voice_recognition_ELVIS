@@ -107,7 +107,7 @@ def textToPcm(p_text, p_pcmFile):
 
     # 收到websocket关闭的处理
     def on_close(ws):
-        print("### closed ###")
+        # print("### closed ###")
 
 
     # 收到websocket连接建立的处理

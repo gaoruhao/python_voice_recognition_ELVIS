@@ -22,34 +22,45 @@ def encodePCM(p_waveform, p_amplitude, p_bitWidth=16):
     
     return pcmResults
 
-def readWaveformFromAI(p_sampleRate, p_sampleSize, p_bank=Bank.A, p_channel=AIChannel.AI0):
+def readWaveformFromAI(p_sampleRate, p_sampleSize, p_bank=Bank.A, p_channel=AIChannel.AI0, p_channelRef=None):
     ai_range = AIRange.PLUS_OR_MINUS_1V
     ai_mode = AIMode.SINGLE_ENDED
+    isNewChannel = p_channelRef is None;
     
     value_array = []
-    with AnalogInput({'bank': p_bank,
-                  'channel': p_channel,
-                  'range': ai_range,
-                  'mode': ai_mode}) as AI_single_channel:
-        # configure the sample rate and start the acquisition
-        AI_single_channel.start_continuous_mode(p_sampleRate)
-        print('开始录音...')
-        
-        # read the value
-        timeout = -1
-        value_array = AI_single_channel.read(p_sampleSize, timeout)
+    if isNewChannel:
+        p_channelRef = AnalogInput(
+            {
+                'bank': p_bank,
+                'channel': p_channel,
+                'range': ai_range,
+                'mode': ai_mode
+            }
+        );
 
-        print('结束录音')
-        
-        # stop signal acquisition
-        AI_single_channel.stop_continuous_mode()
+    # configure the sample rate and start the acquisition
+    p_channelRef.start_continuous_mode(p_sampleRate)
+    print('start to record')
+    
+    # read the value
+    timeout = -1
+    value_array = p_channelRef.read(p_sampleSize, timeout)
+
+    # print('结束录音')
+    print('stop recording')
+    
+    # stop signal acquisition
+    p_channelRef.stop_continuous_mode()
+    
+    if isNewChannel:
+        p_channelRef.close()
     
     return value_array[0]
 
-def generateWaveFile(p_filename, p_sampleRate=44100, p_duration=5, p_bank=Bank.A, p_channel=AIChannel.AI0):
+def generateWaveFile(p_filename, p_sampleRate=44100, p_duration=5, p_bank=Bank.A, p_channel=AIChannel.AI0, p_channelref=None):
     sampleSize = p_sampleRate * p_duration
     
-    waveforms = readWaveformFromAI(p_sampleRate, sampleSize, p_bank, p_channel)
+    waveforms = readWaveformFromAI(p_sampleRate, sampleSize, p_bank, p_channel, p_channelref)
     nchannels = len(waveforms)
     
     pcmChannels = []
