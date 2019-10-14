@@ -39,7 +39,7 @@ def readWaveformFromAI(p_sampleRate, p_sampleSize, p_bank=Bank.A, p_channel=AICh
         timeout = -1
         value_array = AI_single_channel.read(p_sampleSize, timeout)
 
-        print('結束錄音')
+        print('结束录音')
         
         # stop signal acquisition
         AI_single_channel.stop_continuous_mode()
