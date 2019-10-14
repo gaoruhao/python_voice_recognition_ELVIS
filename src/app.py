@@ -21,7 +21,7 @@ def application():
     songName = findSongName(wavefile)
     
     if songName == "":
-        print('对不起，您所唱的歌曲无法识别。')
+        songName = '对不起，您所唱的歌曲无法识别。'
         return
     
     print('歌名处理中...')
