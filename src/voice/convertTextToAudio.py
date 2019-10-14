@@ -102,13 +102,14 @@ def textToPcm(p_text, p_pcmFile):
 
     # 收到websocket错误的处理
     def on_error(ws, error):
-        print("### error:", error)
+        # print("### error:", error)
+        return
 
 
     # 收到websocket关闭的处理
     def on_close(ws):
+        return
         # print("### closed ###")
-
 
     # 收到websocket连接建立的处理
     def on_open(ws):

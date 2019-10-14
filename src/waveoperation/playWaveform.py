@@ -53,7 +53,7 @@ def writeWaveformToAO(p_waveform, p_sampleRate, p_channelRef=None):
             { 'bank': bank, 'channel': channel }
         );
 
-    printString('开始播放...')
+    # printString('朗读歌名...')
     timeout = -1
     MAX_SINGLE_WRITE = 200000
     totalSize = len(p_waveform)
@@ -73,7 +73,7 @@ def writeWaveformToAO(p_waveform, p_sampleRate, p_channelRef=None):
         
     time.sleep(5)
     
-    printString('结束播放')
+    # printString('结束播放')
     p_channelRef.stop_continuous_mode()
     
     if isNewChannel:

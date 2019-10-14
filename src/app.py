@@ -1,9 +1,10 @@
 # -*- coding:utf-8 -*-
+import json
+import time
+
 from waveoperation.generateWaveFile_1channel import generateWaveFile
 from waveoperation.playWaveform import playWaveform
 from waveoperation.pcmToWav import pcmToWav
-
-import json
 
 from voice.findSongName import findSongName
 from voice.convertTextToAudio import textToPcm
@@ -27,6 +28,9 @@ ao_channel = AOChannel.AO0
 def printString(p_text):
     print(p_text.encode("utf-8").decode('unicode_escape'))
 
+def inputString(p_text):
+    return input(p_text.encode("utf-8").decode('unicode_escape'))
+
 def application():
     AIchannelRef = AnalogInput(
         {
@@ -41,21 +45,26 @@ def application():
     );
     
     while(True):
-        inputText = input("Press Enter to start or 'q' to quit")
+        inputText = inputString("按回车键开始或者按q退出")
         if inputText == 'q' or inputText == 'Q':
             break
         
+        printString('准备演唱...')
+        for i in range(4):
+            print(3 - i)
+            time.sleep(1)
+        
         generateWaveFile(wavefile, sampleRate, duration, ai_bank, ai_channel, AIchannelRef)
         
+        printString('歌名查找中...')
         songName = findSongName(wavefile)
         
         if songName == "":
-            # songName = '对不起，您所唱的歌曲无法识别。'
-            songName = 'Sorry, cannot find you song name.'
-            return
+            songName = '对不起，您所唱的歌曲无法识别。'
+        else:
+            songName = "歌名是，" + songName
         
-        # print('歌名处理中...')
-        printString('歌名处理中...')
+        # printString('歌名转换语音中...')
         textToPcm(songName, pcmfile)
         pcmToWav(pcmfile)
         

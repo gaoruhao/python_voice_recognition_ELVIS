@@ -35,9 +35,8 @@ def findSongName(p_filename):
         
         if len(result["data"]) > 0:
             song = result["data"][0]
-            # print(song["song"], ", singer is ", song["singer"])
             print(result2["data"][0]["song"])
-            return "歌名是" + song["song"]
+            return song["song"]
         else:
             print(result)
             return ""

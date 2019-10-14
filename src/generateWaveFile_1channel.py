@@ -72,7 +72,7 @@ def main():
 
     # WORKAROUND: sampleRate / nchannels
     params = (nchannels, 2, sampleRate / nchannels, sampleSize, 'NONE', 'not compressed')
-    print(params)
+    # print(params)
     writeWaveFile('./output_1chan.wav', params, pcmMerged)
 
 main()

@@ -43,7 +43,7 @@ def readWaveformFromAI(p_sampleRate, p_sampleSize, p_bank=Bank.A, p_channel=AICh
 
     # configure the sample rate and start the acquisition
     p_channelRef.start_continuous_mode(p_sampleRate)
-    printString('开始录音...')    
+    printString('开始10秒录音...')    
     
     # read the value
     timeout = -1
