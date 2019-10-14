@@ -1,13 +1,14 @@
 # -*- coding:utf-8 -*-
 import json
 import time
+import glob, os
 
 from waveoperation.generateWaveFile_1channel import generateWaveFile
-from waveoperation.playWaveform import playWaveform
-from waveoperation.pcmToWav import pcmToWav
+from waveoperation.playWaveform import playText
+# from waveoperation.pcmToWav import pcmToWav
 
 from voice.findSongName import findSongName
-from voice.convertTextToAudio import textToPcm
+# from voice.convertTextToAudio import textToPcm
 
 from nielvis import Bank, AnalogInput, AIChannel, AIRange, AIMode, AnalogOutput, AOChannel
 
@@ -31,6 +32,13 @@ def printString(p_text):
 def inputString(p_text):
     return input(p_text.encode("utf-8").decode('unicode_escape'))
 
+def removeWavFiles():
+    for filename in glob.glob("*.wav"):
+        os.remove(filename)
+    
+    for filename in glob.glob("*.pcm"):
+        os.remove(filename)
+
 def application():
     AIchannelRef = AnalogInput(
         {
@@ -45,18 +53,19 @@ def application():
     );
     
     while(True):
-        inputText = inputString("按回车键开始或者按q退出")
+        removeWavFiles()
+        inputText = inputString("按回车键开始 或者 按 Q 退出")
         if inputText == 'q' or inputText == 'Q':
             break
         
         printString('准备演唱...')
-        for i in range(4):
+        for i in range(3):
             print(3 - i)
             time.sleep(1)
         
         generateWaveFile(wavefile, sampleRate, duration, ai_bank, ai_channel, AIchannelRef)
         
-        printString('歌名查找中...')
+        printString('歌名查找中，请耐心等待...')
         songName = findSongName(wavefile)
         
         if songName == "":
@@ -64,11 +73,7 @@ def application():
         else:
             songName = "歌名是，" + songName
         
-        # printString('歌名转换语音中...')
-        textToPcm(songName, pcmfile)
-        pcmToWav(pcmfile)
-        
-        playWaveform(pcmfile + '.wav')
+        playText(songName, pcmfile)
     
     AIchannelRef.close()
     AOchannelRef.close()

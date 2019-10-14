@@ -83,7 +83,7 @@ def generateWaveFile(p_filename, p_sampleRate=44100, p_duration=5, p_bank=Bank.A
     # WORKAROUND: sampleRate / nchannels
     factor = 1
     params = (nchannels, 2, int(p_sampleRate / (nchannels * factor)), sampleSize, 'NONE', 'not compressed')
-    print(params)
+    # print(params)
     writeWaveFile(p_filename, params, pcmMerged)
 
 if __name__ == "__main__":

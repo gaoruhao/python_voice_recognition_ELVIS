@@ -2,6 +2,10 @@ import wave
 import struct
 import math
 import time
+
+from waveoperation.pcmToWav import pcmToWav
+from voice.convertTextToAudio import textToPcm
+
 from nielvis import AnalogOutput, Bank, AOChannel
 
 def printString(p_text):
@@ -79,7 +83,7 @@ def writeWaveformToAO(p_waveform, p_sampleRate, p_channelRef=None):
     if isNewChannel:
         p_channelRef.close()
 
-def playWaveform(p_fileToPlay, p_channelRef=None):
+def playWaveFile(p_fileToPlay, p_channelRef=None):
     pcmArray, pcmParams = readWaveFile(p_fileToPlay)
     #print('[DBG] WAVE params: %s' % (pcmParams,))
     
@@ -91,5 +95,12 @@ def playWaveform(p_fileToPlay, p_channelRef=None):
     #print('[DBG] waveform length %d' % len(waveformToWrite))
     writeWaveformToAO(waveformToWrite, pcmParams.framerate, p_channelRef)
 
+def playText(p_textToPlay, p_fileToSave):
+    textToPcm(p_textToPlay, p_fileToSave)
+    pcmToWav(p_fileToSave)
+
+    printString('歌名查找完毕')
+    playWaveFile(p_fileToSave + '.wav')
+
 if __name__ == "__main__":
-    playWaveform('/home/admin/test123.wav')
+    playWaveFile('/home/admin/test123.wav')
