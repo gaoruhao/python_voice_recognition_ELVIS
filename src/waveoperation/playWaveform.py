@@ -48,7 +48,7 @@ def writeWaveformToAO(p_waveform, p_sampleRate):
         { 'bank': bank, 'channel': channel }
         ) as AO_single_channel:
 
-        print('start to play ...')
+        print('开始播放...')
         timeout = -1
         MAX_SINGLE_WRITE = 200000
         totalSize = len(p_waveform)
@@ -58,7 +58,7 @@ def writeWaveformToAO(p_waveform, p_sampleRate):
         for i in range(numberOfChunks):
             startOffset = i * MAX_SINGLE_WRITE
             endOffset = min(totalSize, (i + 1) * MAX_SINGLE_WRITE - 1)
-            print('[DBG] write range: %d:%d' % (startOffset, endOffset))
+            #print('[DBG] write range: %d:%d' % (startOffset, endOffset))
             
             toWrite = [p_waveform[startOffset:endOffset]]
             if i == 0:
@@ -67,19 +67,19 @@ def writeWaveformToAO(p_waveform, p_sampleRate):
             AO_single_channel.write(toWrite, p_sampleRate)
             
         time.sleep(5)
-        print('stop play')
+        print('结束播放')
         AO_single_channel.stop_continuous_mode()
 
 def playWaveform(p_fileToPlay):
     pcmArray, pcmParams = readWaveFile(p_fileToPlay)
-    print('[DBG] WAVE params: %s' % (pcmParams,))
+    #print('[DBG] WAVE params: %s' % (pcmParams,))
     
     # always choose pcmArray[0] because we only support 1 channel audio out for now.
     AMP_OUT = 3.3
     BITS_PER_BYTE = 8
     waveformToWrite = decodePCM(pcmArray[0], AMP_OUT, pcmParams.sampwidth * BITS_PER_BYTE)
     
-    print('[DBG] waveform length %d' % len(waveformToWrite))
+    #print('[DBG] waveform length %d' % len(waveformToWrite))
     writeWaveformToAO(waveformToWrite, pcmParams.framerate)
 
 if __name__ == "__main__":

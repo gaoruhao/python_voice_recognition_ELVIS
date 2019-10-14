@@ -33,13 +33,13 @@ def readWaveformFromAI(p_sampleRate, p_sampleSize, p_bank=Bank.A, p_channel=AICh
                   'mode': ai_mode}) as AI_single_channel:
         # configure the sample rate and start the acquisition
         AI_single_channel.start_continuous_mode(p_sampleRate)
-        print('start recording...')
+        print('开始录音...')
         
         # read the value
         timeout = -1
         value_array = AI_single_channel.read(p_sampleSize, timeout)
 
-        print('stop recording')
+        print('結束錄音')
         
         # stop signal acquisition
         AI_single_channel.stop_continuous_mode()
