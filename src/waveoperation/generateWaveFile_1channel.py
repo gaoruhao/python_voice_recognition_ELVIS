@@ -3,6 +3,9 @@ import struct
 import time
 from nielvis import AnalogInput, Bank, AIChannel, AIRange, AIMode
 
+def printString(p_text):
+    print(p_text.encode("utf-8").decode('unicode_escape'))
+
 def writeWaveFile(p_file, p_param, p_intArray):
     with wave.open(p_file, 'w') as wavefile:
         wavefile.setparams(p_param)
@@ -33,13 +36,13 @@ def readWaveformFromAI(p_sampleRate, p_sampleSize, p_bank=Bank.A, p_channel=AICh
                   'mode': ai_mode}) as AI_single_channel:
         # configure the sample rate and start the acquisition
         AI_single_channel.start_continuous_mode(p_sampleRate)
-        print('开始录音...')
+        printString('开始录音...')
         
         # read the value
         timeout = -1
         value_array = AI_single_channel.read(p_sampleSize, timeout)
 
-        print('结束录音')
+        printString('结束录音')
         
         # stop signal acquisition
         AI_single_channel.stop_continuous_mode()

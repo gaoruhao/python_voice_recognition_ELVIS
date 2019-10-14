@@ -6,7 +6,7 @@ import json
 import time
 
 def findSongName(p_filename):
-    print('Finding song name ...')
+    #print('Finding song name ...')
     url = "http://webqbh.xfyun.cn/v1/service/v1/qbh"
     appid = "5d9ff727"
     secret_key = "35f450045ba5828ceff7466818d876bd"

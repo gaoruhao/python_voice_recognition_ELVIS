@@ -2,6 +2,8 @@ from waveoperation.generateWaveFile_1channel import generateWaveFile
 from waveoperation.playWaveform import playWaveform
 from waveoperation.pcmToWav import pcmToWav
 
+import json
+
 from voice.findSongName import findSongName
 from voice.convertTextToAudio import textToPcm
 
@@ -15,6 +17,9 @@ bank = Bank.B
 channel = AIChannel.AI0
 pcmfile = './temp.pcm'
 
+def printString(p_text):
+    print(p_text.encode("utf-8").decode('unicode_escape'))
+
 def application():
     generateWaveFile(wavefile, sampleRate, duration, bank, channel)
     
@@ -22,9 +27,8 @@ def application():
     
     if songName == "":
         songName = '对不起，您所唱的歌曲无法识别。'
-        return
     
-    print('歌名处理中...')
+    printString('歌名处理中...')
     textToPcm(songName, pcmfile)
     pcmToWav(pcmfile)
     
