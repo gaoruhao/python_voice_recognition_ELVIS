@@ -12,8 +12,12 @@ import requests
 
 lfasr_host = 'http://raasr.xfyun.cn/api'
 
-APP_ID="5d9ff727"
-API_SECRET_KEY="a42e47cf5ecd8e25322e46ccc23eaac3"
+#############################################
+# Enter your APP_ID and API_SECRET_KEY for the WebAPI.
+# See https://www.xfyun.cn/services/lfasr for more details.
+#############################################
+APP_ID=""
+API_SECRET_KEY=""
 
 api_prepare = '/prepare'
 api_upload = '/upload'

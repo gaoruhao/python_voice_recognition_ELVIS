@@ -1,4 +1,8 @@
-# -*- coding:utf-8 -*-
+# We use the APIs from www.xfyun.cn You have to register a account at
+# https://www.xfyun.cn/services/lfasr and then get the APP_ID, API_KEY, and
+# API_SECRET_KEY in the xfyun control pane page. After register, enter those
+# information in the findSongName.py and convertTextToAudio.py files.
+
 import json
 import time
 import glob, os

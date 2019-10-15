@@ -16,9 +16,13 @@ STATUS_FIRST_FRAME = 0
 STATUS_CONTINUE_FRAME = 1
 STATUS_LAST_FRAME = 2
 
-APP_ID='5d9ff727'
-API_KEY='0e2807aeec798d34d679c1fe2eef663b'
-API_SECRET_KEY='72e18ea361a3f6958bcaf84f25627432'
+#############################################
+# Enter your APP_ID, API_KEY, and API_SECRET_KEY for the WebAPI.
+# See https://www.xfyun.cn/services/online_tts for more details.
+#############################################
+APP_ID=''
+API_KEY=''
+API_SECRET_KEY=''
 
 class Ws_Param(object):
     def __init__(self, APPID, APIKey, APISecret, Text):

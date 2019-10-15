@@ -5,8 +5,12 @@ import hmac
 import json
 import time
 
-APP_ID='5d9ff727'
-API_SECRET_KEY ='35f450045ba5828ceff7466818d876bd'
+#############################################
+# Enter your APP_ID and API_SECRET_KEY for the WebAPI.
+# See https://www.xfyun.cn/services/song-recognition for more details.
+#############################################
+APP_ID=''
+API_SECRET_KEY =''
 
 def findSongName(p_filename):
     url = "http://webqbh.xfyun.cn/v1/service/v1/qbh"
