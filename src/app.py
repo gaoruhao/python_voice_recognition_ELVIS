@@ -47,11 +47,11 @@ def application():
             'range': ai_range,
             'mode': ai_mode
         }
-    );
+    )
     AOchannelRef = AnalogOutput(
         { 'bank': ao_bank, 'channel': ao_channel }
-    );
-    
+    )
+
     while(True):
         removeWavFiles()
         inputText = inputString("按回车键开始 或者 按 Q 退出")

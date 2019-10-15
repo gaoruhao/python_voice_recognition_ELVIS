@@ -12,13 +12,15 @@ import requests
 
 lfasr_host = 'http://raasr.xfyun.cn/api'
 
-# 请求的接口名
+APP_ID="5d9ff727"
+API_SECRET_KEY="a42e47cf5ecd8e25322e46ccc23eaac3"
+
 api_prepare = '/prepare'
 api_upload = '/upload'
 api_merge = '/merge'
 api_get_progress = '/getProgress'
 api_get_result = '/getResult'
-# 文件分片大小10M
+
 file_piece_sice = 10485760
 
 lfasr_type = 0
@@ -29,8 +31,6 @@ suid = ''
 
 
 class SliceIdGenerator:
-    """slice id生成器"""
-
     def __init__(self):
         self.__ch = 'aaaaaaaaa`'
 
@@ -64,7 +64,6 @@ class RequestApi(object):
         m2.update((appid + ts).encode('utf-8'))
         md5 = m2.hexdigest()
         md5 = bytes(md5, encoding='utf-8')
-        # 以secret_key为key, 上面的md5为msg， 使用hashlib.sha1加密结果为signa
         signa = hmac.new(secret_key.encode('utf-8'), md5, hashlib.sha1).digest()
         signa = base64.b64encode(signa)
         signa = str(signa, 'utf-8')
@@ -113,19 +112,14 @@ class RequestApi(object):
         elif "9" in status:
             print("audio transfer completed")
 
-    # 请求和结果解析，结果中各个字段的含义可参考：https://doc.xfyun.cn/rest_api/%E8%AF%AD%E9%9F%B3%E8%BD%AC%E5%86%99.html
     def gene_request(self, apiname, data, files=None, headers=None):
         response = requests.post(lfasr_host + apiname, data=data, files=files, headers=headers)
         result = json.loads(response.text)
         if result["ok"] == 0:
-            #print("\n****** {} success:".format(apiname), " ******")
             if result["data"]:
                 encodedResult = result["data"].encode('unicode_escape')
                 if "status" in str(encodedResult):
                     self._print_status(encodedResult)
-##                else:
-##                    print(result["data"])
-##                    print(encodedResult)
             return result
         else:
             print("****** {} error:".format(apiname), " ******")
@@ -133,12 +127,10 @@ class RequestApi(object):
             exit(0)
             return result
 
-    # 预处理
     def prepare_request(self):
         return self.gene_request(apiname=api_prepare,
                                  data=self.gene_params(api_prepare))
 
-    # 上传
     def upload_request(self, taskid, upload_file_path):
         file_object = open(upload_file_path, 'rb')
         try:
@@ -157,39 +149,29 @@ class RequestApi(object):
                                                                    slice_id=sig.getNextSliceId()),
                                              files=files)
                 if response.get('ok') != 0:
-                    # 上传分片失败
                     print('upload slice fail, response: ' + str(response))
                     return False
-                #print('upload slice ' + str(index) + ' success')
                 index += 1
         finally:
             'file index:' + str(file_object.tell())
             file_object.close()
         return True
 
-    # 合并
     def merge_request(self, taskid):
         return self.gene_request(api_merge, data=self.gene_params(api_merge, taskid=taskid))
 
-    # 获取进度
     def get_progress_request(self, taskid):
         return self.gene_request(api_get_progress, data=self.gene_params(api_get_progress, taskid=taskid))
 
-    # 获取结果
     def get_result_request(self, taskid):
         return self.gene_request(api_get_result, data=self.gene_params(api_get_result, taskid=taskid))
 
     def all_api_request(self):
-        # 1. 预处理
         pre_result = self.prepare_request()
         taskid = pre_result["data"]
-        # 2 . 分片上传
         self.upload_request(taskid=taskid, upload_file_path=self.upload_file_path)
-        # 3 . 文件合并
         self.merge_request(taskid=taskid)
-        # 4 . 获取任务进度
         while True:
-            # 每隔20秒获取一次任务进度
             progress = self.get_progress_request(taskid)
             progress_dic = progress
             if progress_dic['err_no'] != 0 and progress_dic['err_no'] != 26605:
@@ -203,14 +185,12 @@ class RequestApi(object):
                     break
                 #print('The task is ' + taskid)
 
-            # 每次获取进度间隔5S
             time.sleep(5)
-        # 5 . 获取结果
         return self.get_result_request(taskid=taskid)
 
 
 if __name__ == '__main__':
-    api = RequestApi(appid="5d9ff727", secret_key="a42e47cf5ecd8e25322e46ccc23eaac3", upload_file_path=r"./output_1chan.wav")
+    api = RequestApi(appid=APP_ID, secret_key=API_SECRET_KEY, upload_file_path=r"./output_1chan.wav")
     result = api.all_api_request()
     result = result["data"].encode('unicode_escape')
     result = result.decode("utf-8")
